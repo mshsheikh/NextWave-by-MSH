@@ -13,14 +13,7 @@ interface Post {
   description2: string;
 }
 
-// Next.js 13+ expects a PageProps interface with params
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-const Slug: React.FC<PageProps> = ({ params }) => {
+const Slug = ({ params }: { params: { slug: string } }) => {
   const paramsId = params.slug;
 
   const post = detailedData.find(
