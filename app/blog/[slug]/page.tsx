@@ -14,7 +14,7 @@ interface Post {
   description2: string;
 }
 
-// Generate static params for dynamic routes (replaces getStaticPaths)
+// Use generateStaticParams to define dynamic paths for static generation
 export async function generateStaticParams() {
   return detailedData.map((post) => ({
     slug: post.title.toLowerCase().replace(/ /g, "-"),
