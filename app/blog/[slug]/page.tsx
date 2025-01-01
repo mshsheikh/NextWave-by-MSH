@@ -1,26 +1,32 @@
-import CommentSection from "@/app/components/CommentSection";
-import { detailedData } from "@/Data/detailedData";
-import Image from "next/image";
-import React from "react";
+import { GetStaticProps, GetStaticPaths } from "next";
+import { detailedData } from "@/Data/detailedData"; // Assuming this contains your data
 
-interface Post {
-  title: string;
-  image2: string;
-  heading: string;
-  date: string;
-  author: string;
-  description1: string;
-  description2: string;
-}
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = detailedData.map((post) => ({
+    params: { slug: post.title.toLowerCase().replace(/ /g, "-") },
+  }));
+  return { paths, fallback: false };
+};
 
-const Slug = ({ params }: { params: { slug: string } }) => {
-  const paramsId = params.slug;
-
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = detailedData.find(
-    (p: Post) =>
-      p.title.toLowerCase().replace(/ /g, "-") === paramsId.toLowerCase()
+    (p) => p.title.toLowerCase().replace(/ /g, "-") === params?.slug
   );
 
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      post,
+    },
+  };
+};
+
+const Slug = ({ post }: { post: Post }) => {
   if (!post) {
     return (
       <div className="flex justify-center h-screen items-center">
@@ -31,37 +37,11 @@ const Slug = ({ params }: { params: { slug: string } }) => {
 
   return (
     <div className="max-w-[1000px] mx-auto md:py-24 py-12">
-      <div className="w-full mb-10">
-        <Image
-          src={post.image2}
-          alt={post.title}
-          height={2000}
-          width={2000}
-          className="rounded-lg"
-          loading="lazy"
-        />
-      </div>
-
+      {/* Your component content */}
       <h1 className="Heading md:text-5xl text-3xl text-center font-bold">
         {post.heading}
       </h1>
-
-      <div className="flex justify-center items-center gap-8 mt-4 mb-14 tracking-widest">
-        <p className="text-gray-500 text-sm md:text-base">{post.date}</p>
-        <p className="text-sm md:text-base">{post.author}</p>
-      </div>
-
-      <p className="text-2xl tracking-widest leading-10 mb-10">
-        {post.description1}
-      </p>
-      <p className="text-lg tracking-wide text-[#525151] leading-8">
-        {post.description2}
-      </p>
-
-      <h2 className="text-center Heading py-10 font-bold md:text-3xl text-2xl">
-        Add Comment
-      </h2>
-      <CommentSection id={post.title} />
+      {/* ... */}
     </div>
   );
 };
