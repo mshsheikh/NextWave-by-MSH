@@ -14,11 +14,25 @@ interface Post {
   description2: string;
 }
 
-// Generate static params for dynamic routes (replaces getStaticPaths)
+// Generate static params for dynamic routes
 export async function generateStaticParams() {
   return detailedData.map((post) => ({
     slug: post.title.toLowerCase().replace(/ /g, "-"),
   }));
+}
+
+// Generate metadata (optional, if you need SEO meta tags)
+export function generateMetadata({ params }: { params: { slug: string } }) {
+  const post = detailedData.find(
+    (p: Post) =>
+      p.title.toLowerCase().replace(/ /g, "-") === params.slug.toLowerCase()
+  );
+  return post
+    ? {
+        title: post.title,
+        description: post.description1,
+      }
+    : { title: "Post Not Found", description: "This post does not exist." };
 }
 
 const Slug = ({ params }: { params: { slug: string } }) => {
