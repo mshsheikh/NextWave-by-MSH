@@ -71,7 +71,7 @@ const Navbar = () => {
           </li>
           <li className="hover:text-black transition duration-100 cursor-pointer ">
             <Link onClick={closeNavHandler} className="p-3" href={"/blog"}>
-              Blog
+              Blogs
             </Link>
           </li>
           <li className="hover:text-black transition duration-100 cursor-pointer ">
